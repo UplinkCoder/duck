@@ -1,0 +1,34 @@
+{
+  "env": {
+    "development": {
+      "application/javascript": {
+        "presets": [
+          ["env", { "targets": { "electron": "1.6.0" } }]
+        ],
+        "plugins": ["babel-plugin-inferno", "transform-async-to-generator", "transform-es2015-classes", ["module-resolver", {
+            "root": ["."],
+            "alias": {
+                "react": "inferno-compat",
+                "react-dom": "inferno-compat"
+            }
+        }]],
+        "sourceMaps": "inline"
+      }
+    },
+    "production": {
+      "application/javascript": {
+        "presets": [
+          ["env", { "targets": { "electron": "1.6.0" } }]
+        ],
+        "plugins": ["babel-plugin-inferno", "transform-async-to-generator", "transform-es2015-classes", ["module-resolver", {
+            "root": ["."],
+            "alias": {
+                "react": "inferno-compat",
+                "react-dom": "inferno-compat"
+            }
+        }]],
+        "sourceMaps": "none"
+      }
+    }
+  }
+}

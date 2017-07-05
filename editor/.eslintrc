@@ -1,0 +1,33 @@
+{
+  "extends": "eslint-config-airbnb",
+  "rules": {
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": [2, { "ignore": ["electron"] }],
+    "linebreak-style": 0,
+    "react/prefer-stateless-function": 0,
+    "react/react-in-jsx-scope": 0,
+    "no-plusplus": 0,
+    "no-shadow": 0,
+    "spaced-comment": 0,
+    "vars-on-top": 0,
+    "no-multiple-empty-lines": 0,
+    "max-len": 0,
+    "one-var": 0,
+    "one-var-declaration-per-line": 0,
+    "react/prop-types": 0,
+    "no-unused-vars": [1, { "varsIgnorePattern": "Inferno" }],
+    "no-param-reassign": 0,
+    "no-console": 1
+  },
+   "plugins": [
+    "inferno"
+  ],
+  {
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
+}
+}
