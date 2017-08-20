@@ -12,7 +12,7 @@ export default class Editor extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.state.editor = CodeMirror.initialize(this.node);
+      this.state.editor = CodeMirror.initialize(this.node, this.props.options);
       if (this.state.document) {
         this.state.editor.swapDoc(this.state.document);
       } else {

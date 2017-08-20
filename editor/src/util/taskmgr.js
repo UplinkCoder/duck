@@ -41,7 +41,7 @@ class TaskManager {
   }
 
   start() {
-    this.process = util.spawn('../dlib/bin/iduck');
+    this.process = util.spawn('../bin/iduck');
 
     let output = '';
     this.process.stderr.on('data', (buffer) => {

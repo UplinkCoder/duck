@@ -1,13 +1,50 @@
 import CodeMirror from 'codemirror';
-import taskManager from '../util/taskmgr';
-import Validator from './syntax-validator';
+import './code-completion';
+
+function parseErrors(text) {
+  const found = [];
+  const errors = (text || '').split('\n');
+  for (let i = 0; i < errors.length; ++i) {
+    let m = errors[i].match(/^[.a-zA-Z0-9_\-/]*\((\d+):(\d+)-(?:(\d+):)?(\d+)\):\s+(.*)/);
+    if (!m) {
+      m = errors[i].match(/^[.a-zA-Z0-9_\-/]*\((\d+):(\d+)\):\s+(.*)/);
+      if (m) {
+        m[5] = m[3];
+        m[3] = m[1];
+        m[4] = m[2];
+      }
+    }
+    if (m) {
+      found.push({
+        from: CodeMirror.Pos(+m[1] - 1, m[2] - 1),
+        to: CodeMirror.Pos(+(m[3] || m[1]) - 1, m[4]),
+        message: m[5],
+      });
+    }
+  }
+  return found;
+}
+
+function getAnnotations(validator, callback) {
+  return (code, updateLinting, options, cm) => {
+    validator(code, (output) => {
+      const errors = parseErrors(output);
+      cm.operation(() => {
+        updateLinting(cm, errors);
+      });
+      if (callback) callback(errors);
+    });
+  };
+}
 
 function createDoc(text) {
   const doc = CodeMirror.Doc(text, 'text/x-d');
   return doc;
 }
 
-function initialize(node) {
+function initialize(node, options) {
+  options.validateCode = options.validateCode || (() => {});
+  options.executeCode = options.executeCode || (() => {});
   const editor = CodeMirror(node, {
     lineNumbers: true,
     mode: 'text/x-d',
@@ -16,7 +53,7 @@ function initialize(node) {
     //singleLineStringErrors: false,
     //lineNumberFormatter: a => '',
     lint: {
-      getAnnotations: Validator.validate(() => { /* */ }),
+      getAnnotations: getAnnotations(options.validateCode),
       async: true,
       delay: 1,
     },
@@ -80,7 +117,7 @@ function initialize(node) {
 
   editor.addKeyMap({
     'Cmd-B': (cm) => {
-      taskManager.execute('temp', cm.getDoc().getValue(), () => {});
+      options.executeCode(cm.getDoc().getValue());
     },
     'Shift-Tab': (cm) => {
       let cursor = cm.getCursor();

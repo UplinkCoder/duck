@@ -18,7 +18,9 @@
     "react/prop-types": 0,
     "no-unused-vars": [1, { "varsIgnorePattern": "Inferno" }],
     "no-param-reassign": 0,
-    "no-console": 1
+    "no-console": 1,
+    "comma-dangle": 0,
+    "no-cond-assign": [1, "except-parens"]
   },
    "plugins": [
     "inferno"
